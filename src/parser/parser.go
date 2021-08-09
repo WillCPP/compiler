@@ -12,6 +12,7 @@ import (
 	"compiler/src/types"
 	"errors"
 	"log"
+	"strconv"
 )
 
 var tokenIndex int = 0
@@ -47,7 +48,7 @@ func Parse(tokenListArg []types.Token) types.ParseNode {
 
 	err := ParseProgram()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(errors.New(err.Error() + "\nLine: " + strconv.Itoa(currentToken.LineNumber)))
 	}
 	return parseTreeRoot
 }
@@ -119,7 +120,7 @@ func AddSymbolTableEntry(makeGlobal bool, stEntry types.STEntry, localSymbolTabl
 func ParseProgram() error {
 	node := types.ParseNode{Production: types.ProgramProd}
 	parseTreeRoot = node
-	errString := "Error parsing program"
+	errString := "\nError parsing program"
 
 	err := ParseProgramHeader(&parseTreeRoot)
 	if err != nil {
